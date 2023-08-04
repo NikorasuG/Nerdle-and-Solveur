@@ -1,33 +1,36 @@
 # Nerdle Clone V0.1
 
-## Table of Contents
+## Sommaire
 
-- [A propos](#apropos)
-- [Getting Started](#Explications)
+- [À propos](#apropos)
+- [Getting Started](#explications)
+- [Déploiement](#deploiement)
 
 
-## A propos <a name = "apropos"></a>
+## À propos <a name="apropos"></a>
 
-Une application web nerdle avec un solveur.
+Une application web Nerdle avec un solveur.
 
-## Explications <a name = "Explications"></a>
+## Explications <a name="explications"></a>
 
-Le but du jeu est similaire a celui du Wordle il faut proposer une equation si ce n'es pas l'équation attendu les caractéres correctement placé seront afficher en vert, les caractéres present mais mal placé seront jaune et les caractere qui ne sont pas dans la solution seront rouge. Voir [deploiment](#deploiment) for notes on how to deploy the project on a live system.
+Le but du jeu est similaire à celui du Wordle. Il faut proposer une équation, si ce n'est pas l'équation attendue, les caractères correctement placés seront affichés en vert, les caractères présents mais mal placés seront en jaune et les caractères qui ne sont pas dans la solution seront en rouge. Voir [Déploiement](#deploiement) pour déployer le projet.
 
-### Prerequis
 
-J'ai eu la fleme regarder juste les module python qui vous manque dans les imports
+## Déploiement <a name="deploiement"></a>
+### Prérequis
 
-### Instalation
+J'ai eu la flemme, vérifier juste les modules Python qui vous manquent dans les imports.
+
+### Installation
 
 Pour installer le front : 
-aller dans ```NerdleApp\front``` et executé les commandes suivantes : 
+aller dans ```NerdleApp\front``` et exécuter les commandes suivantes : 
 ```
 npm install
 npm run dev
 ```
 
-Pour installer le back si vous avez les Prerequis
+Pour installer le back si vous avez les Prérequis :
 
 ```
 flask run
