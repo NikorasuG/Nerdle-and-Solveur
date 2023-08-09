@@ -9,7 +9,7 @@
 
 ## À propos <a name="apropos"></a>
 
-Une application web Nerdle avec un solveur.
+Une application web sur le concept du Nerdle avec un solveur.
 
 ## Explications <a name="explications"></a>
 
