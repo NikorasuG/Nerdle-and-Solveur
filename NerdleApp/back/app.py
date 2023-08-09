@@ -1,5 +1,5 @@
 from flask import Flask, abort, request
-from Solveur.equations import checkeqs,loadAllEqus,compareSolution
+from modules.equations import checkeqs,loadAllEqus,compareSolution
 from flask_cors import CORS,cross_origin
 from dotenv import load_dotenv
 from os import getenv
