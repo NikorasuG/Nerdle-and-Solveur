@@ -35,3 +35,4 @@ Pour installer le back si vous avez les Prérequis :
 ```
 flask run
 ```
+Enfin il faut creer un fichier ```.env``` par copy du fichier ```.env.example```
