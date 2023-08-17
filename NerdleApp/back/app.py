@@ -1,5 +1,5 @@
 from flask import Flask, abort, request
-from modules.equations import checkeqs,loadAllEqus,compareSolution
+from modules.equations import checkeqs,loadAllEqus,compute_pattern,getColors
 from flask_cors import CORS,cross_origin
 from dotenv import load_dotenv
 from os import getenv
@@ -25,7 +25,7 @@ def checkequ():
     if data['equation'] == equ:
         return {'message':'success'}
     elif checkeqs(data['equation']):
-        return compareSolution(data['equation'],equ)
+        return getColors(compute_pattern(data['equation'],equ))
     else:
         return {'message':'invalid equation'}
 

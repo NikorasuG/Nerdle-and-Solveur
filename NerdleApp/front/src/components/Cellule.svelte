@@ -12,12 +12,12 @@
 
 <style>
     .correct{
-        background-color: rgb(15 118 110);
+        background-color: #0f766e;
     }
     .incorrect{
-        background-color: rgb(153 27 27);
+        background-color: #991b1b;
     }
     .misplaced{
-        background-color: rgb(161 98 7);
+        background-color: #a16207;
     }
 </style>

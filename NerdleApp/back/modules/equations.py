@@ -1,6 +1,7 @@
 #this file is used to generate all possible equations with a given set of characters and a given length
 import itertools
 from time import perf_counter
+import os
 
 characters = '0123456789+-*/='
 length = 7
@@ -48,26 +49,46 @@ def genfile():
         for x in valRestrict:
             f.write(x+"\n")
 def loadAllEqus(length = '8'):
-    with open('Solveur/listEqu/nerdle'+str(length)+'.txt', 'r') as f:
+    print(os.getcwd())
+    with open('modules/listEqu/nerdle'+str(length)+'.txt', 'r') as f:
         for line in f:
             valEqs.append(line[:-1])
     return valEqs
 
-def compareSolution(eq,sol):
+def compute_pattern(tentative, truth):
+    result = [0 for i in range(len(tentative))]
+    truth_list = list(truth)
+
+    for k in range(len(tentative)):
+        if tentative[k] == truth[k]:
+            result[k] = 2  # Green coded by 2
+            truth_list[k] = '-'
+
+    for k in range(len(tentative)):
+        if result[k] != 0:
+            continue
+        
+        fnd = False
+        for k2 in range(len(tentative)):
+            # If found elsewhere and that elsewhere is not already green
+            if tentative[k] == truth_list[k2]:
+                fnd = True
+                truth_list[k2] = '-'
+                break
+        if fnd:
+            result[k] = 1  # Yellow coded by 1
+    return result
+
+def getColors(pattern):
     responseCode=[]
     dup = ''
-    if len(eq)==len(sol):
-        for i in range(len(eq)):
-            if eq[i]==sol[i]:
-                responseCode.append('correct')
+    for i in pattern:
+        if i==2:
+            responseCode.append('correct')
+        elif i==1:
+            responseCode.append('misplaced')
+        else:
+            responseCode.append('incorrect')
+    return {'message':responseCode}
 
-            elif eq[i] in sol and eq[i] not in dup:
-                responseCode.append('misplaced')
-                dup+=eq[i]
-            else:
-                responseCode.append('incorrect')
-
-        return {'message':responseCode}
-    return {'message':'error not the same length'}
-
-
+print(compute_pattern('48-34=14','6-11+9=4'))

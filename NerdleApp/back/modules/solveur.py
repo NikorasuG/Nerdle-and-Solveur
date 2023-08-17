@@ -1,3 +1,4 @@
+import pickle
 import threading
 import numpy as np
 import concurrent.futures
@@ -19,15 +20,23 @@ def loadAllEqus(length = '8'):
             allEqs.append(line[:-1])
     return allEqs
 def checkPattern(eq1,eq2,pattern):
+    tested=[]
+    for i in range(len(eq1)):
+        if pattern[i] == '2':
+            if eq1[i] != eq2[i]:
+                return False
+            else:
+                tested.append(eq1[i])
+            
+    for i in range(len(eq1)):
+        if pattern[i] == '1':
+            if eq1[i] not in eq2 or eq1[i] == eq2[i] :
+                return False
+            else:
+                tested.append(eq1[i])
     for i in range(len(eq1)):
         if pattern[i] == '0':
-            if eq1[i] in eq2:
-                return False
-        elif pattern[i] == '1':
-            if eq1[i] == eq2[i] or eq1[i] not in eq2:
-                return False
-        elif pattern[i] == '2':
-            if eq1[i] != eq2[i]:
+            if eq1[i] in eq2 and eq1[i] not in tested:
                 return False
     return True
 
@@ -100,40 +109,7 @@ def NbPossibleAll(eqs,eq,patterns):
         counters.append(NbPossible(eqs,eq,i))
     return counters
 
-"""
-def entropy(scores):
-    nbAll = len(loadAllEqus())
-    entropy = 0
-    for i in scores:
-        p= i/nbAll
-        if i != 0:
-            entropy += (-p*log2(p))
-        else :
-            entropy += 0
-    return entropy
-"""
-
-"""def bestStart():
-    scores = []
-    allEqs=loadAllEqus()
-    allPatterns=createAllPatterns()
-    start = perf_counter()
-    length = len(allEqs)
-    for i in range(length):
-
-        scores.append(entropy(NbPossibleAll(allEqs,allEqs[i],allPatterns)))
-
-        print("for eq :"+allEqs[i]+" entropy is :"+str(scores[i]))
-        print("=========================================")
-        print("still "+str(len(allEqs)-i)+" to go")
-        if i!=0:
-            elapsed = perf_counter()-start
-            print(i/length*100,"Time spent/remaining:",elapsed,elapsed*(length-i)/i)
-    with open('entropy.txt', 'w') as f:
-        for x in scores:
-            f.write(str(x)+"\n")
-    return scores.sort()[0]"""
-def bestStart():
+def listEntropy():
     scores = []
     allEqs = loadAllEqus()
     allPatterns = createAllPatterns()
@@ -157,4 +133,40 @@ def bestStart():
             f.write(str(x) + "\n")
     
     return scores[0]
-print(bestStart())
+
+def listEntropy2():
+    entropys = dict()
+    with open('entropy.txt', 'r') as f:
+        lines = f.readlines()
+        for i in range(len(lines)):
+            entropys[i] = float(lines[i].strip("\n"))
+    #save to pkl
+    with open('entropy.pkl', 'wb') as f:
+        pickle.dump(entropys, f, pickle.HIGHEST_PROTOCOL)
+    return entropys
+
+def bestStart():
+    with open('entropy.pkl', 'rb') as f:
+        entropys = pickle.load(f)
+    return max(entropys, key=entropys.get)
+
+def getListEqRestant(eq,pattern,listEq,entropys):
+    newListEq = []
+    for i in range(len(listEq)):
+        if checkPattern(eq,listEq[i],pattern):
+            newListEq.append(listEq[i])
+        else:
+            entropys.pop(i)
+    print(len(newListEq))
+    print(len(entropys))
+    return listEq,entropys
+def bestEq(listEq,eq,pattern,entropys):
+    
+    listEq,entropys=getListEqRestant(eq,pattern,listEq,entropys)
+    idbest=max(entropys, key=entropys.get)
+    return listEq[idbest]
+
+with open('entropy.pkl', 'rb') as f:
+    entropys = pickle.load(f)
+
+print(bestEq(loadAllEqus(), '48-34=14', '00000100', entropys))
