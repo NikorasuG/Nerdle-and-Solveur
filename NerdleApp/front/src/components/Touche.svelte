@@ -1,4 +1,5 @@
 <script>
+    //objet des touches du clavier
     export let press;
     export let char;
 </script>

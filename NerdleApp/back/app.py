@@ -20,6 +20,7 @@ cors = CORS(app)
 
 @app.route('/checkequ',methods=['POST'])
 def checkequ():
+    """this route is used to Check if the equation is valid and return the colors of the equation"""
     data = request.get_json()
     equ = decodeToken(data['token'])
     if data['equation'] == equ:
@@ -31,19 +32,18 @@ def checkequ():
 
 @app.route('/getequ',methods=['GET'])
 def getequ():
+    """this route is used to get a random equation and return it as a token to secure it"""
     length = request.args.get('length')
     equDuJour = choice(loadAllEqus(length))
     print(equDuJour)
-    equCrypted = fernet.encrypt(equDuJour.encode())
+    equCrypted = fernet.encrypt(equDuJour.encode()) #encrypting the equation so the player can't see it
     payload = {'equation':equCrypted.decode()}
     
-    decrypted = payload['equation'].encode()
-    decrypted = fernet.decrypt(decrypted).decode()
-    
-    token = jwt.encode(payload,secret,algorithm='HS256')
+    token = jwt.encode(payload,secret,algorithm='HS256') #jwt token to secure the session
     return {"token":token}
 @app.route('/gethelp',methods=['POST'])
 def getHelp():
+    """this route is used to get a hint for the equation"""
     data = request.get_json()
     eqs = data['equation']
     colors = data['colors']
@@ -51,21 +51,26 @@ def getHelp():
     return {"hint":hint}
     
 def decodeToken(token):
+    """this function is used to decode the token and return the equation"""
     decoded = jwt.decode(token,secret,algorithms=['HS256'])
     decrypted = decoded['equation'].encode()
     decrypted = fernet.decrypt(decrypted).decode()
     return decrypted
 
 def getHints(tries,colors):
+    """this function loop through all the tries the player did before asking for a hint 
+    and return the eq with the highest entropy from the remaining possible equations"""
+    
     allEqs = deepcopy(loadAllEqus())
     idpossibleEqs = [i for i in range(len(allEqs))]
     entropys = deepcopy(loadEntropys())
-    if len(tries) == 0:
+    
+    if len(tries) == 0: #exeption for the best start
         return bestEq(allEqs,entropys)
     else:
-        for i in range(len(tries)):
+        for i in range(len(tries)): #looping through all the tries
             eq, pattern = tries[i], colors[i]
-            idpossibleEqs,entropys = getListEqRestant(eq,pattern,allEqs,entropys,idpossibleEqs)
+            idpossibleEqs,entropys = getListEqRestant(eq,pattern,allEqs,entropys,idpossibleEqs) #computing the remaining possible equations
 
-        return bestEq(allEqs,entropys)
+        return bestEq(allEqs,entropys) #returning the best equation from the remaining possible equations
             

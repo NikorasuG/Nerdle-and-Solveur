@@ -1,4 +1,5 @@
 export function checkequ(equ,sol) {
+    // This function is used to check with the back if the equation is correct
     const response = fetch("http://localhost:5000/checkequ", {
         method: "POST",
         headers: {

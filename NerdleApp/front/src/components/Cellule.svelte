@@ -1,4 +1,5 @@
 <script>
+    //objet cellule trois classe sont predéfinie pour les cellules correct incorrect et misplaced
     import { grille, couleurs } from "../stores/gameStore.js";
     export let x;
     export let y;

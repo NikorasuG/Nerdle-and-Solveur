@@ -1,10 +1,7 @@
 export function getHelp(equ,sol,colors,essai) {
-    console.log("getHelp");
-    console.log(equ);
-    console.log(colors);
+    /*this function is used to request a hint for the current game given the current state of tries an colors*/
     const [returnEqs,returnColors] = formatHelp(equ,colors,essai)
-    console.log(returnEqs)
-    console.log(returnColors)
+
     const response = fetch("http://localhost:5000/gethelp", {
         method: "POST",
         headers: {
@@ -21,6 +18,8 @@ export function getHelp(equ,sol,colors,essai) {
 }
 
 function formatHelp(eqs,colors,essai) {
+    // This function is used to format the data to send to the server in order to get the help
+    // The server needs the data to be in a specific format a liste of string for the equations and a list of string for the colors
     let trueEqus = []
     let trueColors = []
     for (let index = 0; index < essai; index++) {

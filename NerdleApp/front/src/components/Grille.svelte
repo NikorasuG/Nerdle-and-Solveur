@@ -1,4 +1,5 @@
 <script>
+    //objet de la grille de jeu contenant les cellules ou s'afficheront les couleur et les chiffres
     import { grille } from "../stores/gameStore.js";
     import Cellule from "./Cellule.svelte";
 </script>
