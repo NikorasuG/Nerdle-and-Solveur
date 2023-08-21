@@ -13,12 +13,14 @@ def createAllPatterns(length = '8'):
     for i in product('012',repeat = int(length)):
         allPatterns.append(''.join(i))
     return allPatterns
+
 def loadAllEqus(length = '8'):
     allEqs = []
     with open('NerdleApp/back/modules/listEqu/nerdle'+str(length)+'.txt', 'r') as f:
         for line in f:
             allEqs.append(line[:-1])
     return allEqs
+
 def checkPattern(eq1,eq2,pattern):
     tested=[]
     for i in range(len(eq1)):
@@ -27,17 +29,20 @@ def checkPattern(eq1,eq2,pattern):
                 return False
             else:
                 tested.append(eq1[i])
-            
+                
     for i in range(len(eq1)):
+
         if pattern[i] == '1':
             if eq1[i] not in eq2 or eq1[i] == eq2[i] :
                 return False
             else:
                 tested.append(eq1[i])
+
     for i in range(len(eq1)):
         if pattern[i] == '0':
             if eq1[i] in eq2 and eq1[i] not in tested:
                 return False
+
     return True
 
 def findPattern(eq1,eq2):
@@ -103,6 +108,7 @@ def NbPossible(eqs,eq,pattern):
         if checkPattern(eq,i,pattern):
             counter += 1
     return counter
+
 def NbPossibleAll(eqs,eq,patterns):
     counters = []
     for i in patterns:
@@ -136,7 +142,9 @@ def listEntropy():
 
 def listEntropy2():
     entropys = dict()
-    with open('entropy.txt', 'r') as f:
+    #get working dir
+    print(os.getcwd())
+    with open('modules/entropy.txt', 'r') as f:
         lines = f.readlines()
         for i in range(len(lines)):
             entropys[i] = float(lines[i].strip("\n"))
@@ -150,23 +158,21 @@ def bestStart():
         entropys = pickle.load(f)
     return max(entropys, key=entropys.get)
 
-def getListEqRestant(eq,pattern,listEq,entropys):
+def getListEqRestant(eq,pattern,listEq,entropys,idpossibleEqs):
     newListEq = []
-    for i in range(len(listEq)):
+    
+    for i in idpossibleEqs:
         if checkPattern(eq,listEq[i],pattern):
-            newListEq.append(listEq[i])
+            newListEq.append(i)
         else:
             entropys.pop(i)
-    print(len(newListEq))
-    print(len(entropys))
-    return listEq,entropys
-def bestEq(listEq,eq,pattern,entropys):
-    
-    listEq,entropys=getListEqRestant(eq,pattern,listEq,entropys)
+    return newListEq,entropys
+
+def bestEq(listEq,entropys):
     idbest=max(entropys, key=entropys.get)
     return listEq[idbest]
 
-with open('entropy.pkl', 'rb') as f:
-    entropys = pickle.load(f)
-
-print(bestEq(loadAllEqus(), '48-34=14', '00000100', entropys))
+def loadEntropys():
+    with open('modules/entropys.pkl', 'rb') as f:
+        entropys = pickle.load(f)
+    return entropys

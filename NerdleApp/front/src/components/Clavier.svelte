@@ -4,6 +4,7 @@
     import {grille,info,couleurs,equation,solution,createGrid} from "../stores/gameStore.js";
     import {checkequ} from "../requests/checkEqu.js";
     import {getSol} from "../requests/getSol.js";
+    import {getHelp} from "../requests/getHelp.js";
 
     const ligne1 = ['1','2','3','4','5','6','7','8','9','0'];
     const ligne2 = ['Entrer','+', '-','*','/','=','Supprimer'];
@@ -58,8 +59,9 @@
     const quitter = () =>{
         window.location.href = "/";
     }
-    const aide = () =>{
-        alert("git gud (solveur not implemented)");
+    const aide = async () =>{
+        let data = await getHelp($grille,$solution,$couleurs,$info.essai);
+        alert("essayer ça : "+data.hint);
     }
     const handleTry = async () => {
         const newCouleurs = $couleurs;

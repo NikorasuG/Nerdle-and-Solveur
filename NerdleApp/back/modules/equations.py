@@ -48,8 +48,10 @@ def genfile():
     with open('NerdleApp/back/Solveur/listEqu/nerdle'+str(length)+'.txt', 'w') as f:
         for x in valRestrict:
             f.write(x+"\n")
+
 def loadAllEqus(length = '8'):
     print(os.getcwd())
+    valEqs = []
     with open('modules/listEqu/nerdle'+str(length)+'.txt', 'r') as f:
         for line in f:
             valEqs.append(line[:-1])
@@ -62,7 +64,7 @@ def compute_pattern(tentative, truth):
     for k in range(len(tentative)):
         if tentative[k] == truth[k]:
             result[k] = 2  # Green coded by 2
-            truth_list[k] = '-'
+            truth_list[k] = '_'
 
     for k in range(len(tentative)):
         if result[k] != 0:
@@ -73,12 +75,12 @@ def compute_pattern(tentative, truth):
             # If found elsewhere and that elsewhere is not already green
             if tentative[k] == truth_list[k2]:
                 fnd = True
-                truth_list[k2] = '-'
+                truth_list[k2] = '_'
                 break
         if fnd:
             result[k] = 1  # Yellow coded by 1
     return result
-
+print(compute_pattern("48-34=14","440/5=88"))
 def getColors(pattern):
     responseCode=[]
     dup = ''
@@ -90,5 +92,3 @@ def getColors(pattern):
         else:
             responseCode.append('incorrect')
     return {'message':responseCode}
-
-print(compute_pattern('48-34=14','6-11+9=4'))
